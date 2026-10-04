@@ -44,14 +44,15 @@ img, video, svg, canvas { max-width: 100%; }
 }
 
 @media (max-width: 860px) {
-  [data-ovsection] > div > div { height: clamp(220px, 58vw, 420px) !important; }
+  [data-ovsection] > div > div { height: auto !important; }
   header p br, [data-ovnote] p br { display: none; }
 }
 
 @media (max-width: 640px) {
   header { padding-top: clamp(104px, 26vw, 150px) !important; }
   [data-ovsection] { padding-left: 20px !important; padding-right: 20px !important; }
-  [data-ovsection] > div > div { height: clamp(200px, 62vw, 340px) !important; border-radius: 12px !important; }
+  [data-ovsection] > div > div { height: auto !important; border-radius: 12px !important; }
+  [data-ovsection] > div > div img, [data-ovsection] > div > div video { height: auto !important; width: 100% !important; display: block !important; }
   #sp-footgrid { grid-template-columns: minmax(0, 1fr) !important; gap: 34px !important; }
   #sp-footgrid > div { margin-inline: 0 !important; align-items: flex-start !important; text-align: left !important; }
   #sp-flogo { width: clamp(120px, 42vw, 180px) !important; }
@@ -299,26 +300,6 @@ img, video, svg, canvas { max-width: 100%; }
         <span style="width:7px;height:7px;border-radius:999px;background:#2F6B4F;box-shadow:0 0 0 4px rgba(47,107,79,.18)"></span>
         Available for new projects
       </span>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:6px">
-      <span style="font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(252,250,248,.4);padding-bottom:12px">Elsewhere</span>
-        <a href="https://www.behance.net/shivampanchal3" target="_blank" rel="noreferrer" aria-label="Behance" data-soc="" style="display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #2E2927;color:#8C8683;font-size:14.5px;font-weight:500;transition:color .35s ease,padding-left .45s cubic-bezier(.22,1,.36,1)" style-hover="color:#FCFAF8;padding-left:8px">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><path d="M8.8 5.5H3v13h6.1c3 0 4.9-1.4 4.9-3.9 0-1.8-1.1-2.9-2.6-3.2 1.2-.4 2-1.4 2-2.8 0-2.1-1.6-3.1-4.6-3.1Zm-.4 5.2H5.7V7.6h2.6c1.2 0 1.9.5 1.9 1.5s-.7 1.6-1.8 1.6Zm.3 5.6H5.7v-3.4h3c1.3 0 2.1.6 2.1 1.7s-.8 1.7-2.1 1.7ZM21 13.7c0-2.7-1.6-4.7-4.3-4.7-2.6 0-4.4 2-4.4 4.8 0 2.9 1.8 4.8 4.5 4.8 2.1 0 3.6-1.1 4.1-3h-2.4c-.2.7-.8 1.1-1.6 1.1-1.2 0-1.9-.8-2-2.1H21v-.9Zm-6.1-.8c.2-1.1.9-1.8 1.8-1.8 1 0 1.7.7 1.8 1.8h-3.6ZM15 6.3h4.9v1.5H15V6.3Z" fill="currentColor"></path></svg>
-          Behance
-          <svg width="13" height="13" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:auto;flex:0 0 auto;opacity:.55"><path d="M2 10 10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/shivam-panchal-b58161186" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-soc="" style="display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #2E2927;color:#8C8683;font-size:14.5px;font-weight:500;transition:color .35s ease,padding-left .45s cubic-bezier(.22,1,.36,1)" style-hover="color:#FCFAF8;padding-left:8px">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.15 1.45-2.15 2.96V21h-4V9Z" fill="currentColor"></path></svg>
-          LinkedIn
-          <svg width="13" height="13" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:auto;flex:0 0 auto;opacity:.55"><path d="M2 10 10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        </a>
-        <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" data-soc="" style="display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #2E2927;color:#8C8683;font-size:14.5px;font-weight:500;transition:color .35s ease,padding-left .45s cubic-bezier(.22,1,.36,1)" style-hover="color:#FCFAF8;padding-left:8px">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><path d="M12 2.2c-2.7 0-3 0-4.1.06-1.05.05-1.77.22-2.4.46a4.8 4.8 0 0 0-1.75 1.13A4.8 4.8 0 0 0 2.62 5.6c-.24.63-.4 1.35-.46 2.4C2.1 9.1 2.1 9.4 2.1 12s0 2.9.06 4c.05 1.05.22 1.77.46 2.4a4.8 4.8 0 0 0 1.13 1.75 4.8 4.8 0 0 0 1.75 1.13c.63.24 1.35.4 2.4.46 1.1.06 1.4.06 4.1.06s3 0 4.1-.06c1.05-.05 1.77-.22 2.4-.46a5 5 0 0 0 2.88-2.88c.24-.63.4-1.35.46-2.4.06-1.1.06-1.4.06-4s0-2.9-.06-4c-.05-1.05-.22-1.77-.46-2.4a4.8 4.8 0 0 0-1.13-1.75 4.8 4.8 0 0 0-1.75-1.13c-.63-.24-1.35-.4-2.4-.46-1.1-.06-1.4-.06-4.1-.06Zm0 1.8c2.65 0 2.96 0 4 .06.9.04 1.38.19 1.7.31.43.17.74.37 1.06.69.32.32.52.63.69 1.06.12.32.27.8.31 1.7.05 1.04.06 1.35.06 4s-.01 2.96-.06 4c-.04.9-.19 1.38-.31 1.7-.17.43-.37.74-.69 1.06-.32.32-.63.52-1.06.69-.32.12-.8.27-1.7.31-1.04.05-1.35.06-4 .06s-2.96-.01-4-.06c-.9-.04-1.38-.19-1.7-.31a2.9 2.9 0 0 1-1.06-.69 2.9 2.9 0 0 1-.69-1.06c-.12-.32-.27-.8-.31-1.7-.05-1.04-.06-1.35-.06-4s.01-2.96.06-4c.04-.9.19-1.38.31-1.7.17-.43.37-.74.69-1.06.32-.32.63-.52 1.06-.69.32-.12.8-.27 1.7-.31 1.04-.05 1.35-.06 4-.06Zm0 3.06a4.94 4.94 0 1 0 0 9.88 4.94 4.94 0 0 0 0-9.88Zm0 8.14a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm6.29-8.34a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0Z" fill="currentColor"></path></svg>
-          Instagram
-          <svg width="13" height="13" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:auto;flex:0 0 auto;opacity:.55"><path d="M2 10 10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        </a>
-        
     </div>
   </div>
 
