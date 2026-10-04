@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./image-slot.js"></script>
+<script src="./aurora.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<style>
+@font-face{font-family:'Switzer';src:url('./uploads/switzer/Switzer-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Switzer';src:url('./uploads/switzer/Switzer-Medium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Switzer';src:url('./uploads/switzer/Switzer-Semibold.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Switzer';src:url('./uploads/switzer/Switzer-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+html,body{margin:0;padding:0;background:#0D0A0A;color:#FCFAF8;font-family:'Switzer',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+a{color:inherit;text-decoration:none}
+a:hover{color:#FF6B69}
+::selection{background:#E8312F;color:#FCFAF8}
+@keyframes sm-rise{0%{opacity:0;transform:translate3d(0,26px,0)}100%{opacity:1;transform:translate3d(0,0,0)}}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+/* ───────────────────────── Responsive layer ─────────────────────────
+   Media queries cannot be inlined, so the mobile layout lives here.
+   Every block is gated behind max-width / coarse-pointer — desktop
+   rules are untouched. */
+
+html, body { max-width: 100%; overflow-x: hidden; }
+img, video, svg, canvas { max-width: 100%; }
+
+@media (hover: none) {
+  a[data-cursor], button[data-cursor], [data-contact-trigger], [data-cchip] { min-height: 44px; }
+}
+
+@media (max-width: 1000px) {
+  /* sticky note above the media rail, one column */
+  [data-ovsection] { grid-template-columns: minmax(0, 1fr) !important; gap: clamp(20px, 4vw, 36px) !important; }
+  [data-ovnote] { position: static !important; top: auto !important; }
+}
+
+@media (max-width: 860px) {
+  [data-ovsection] > div > div { height: clamp(220px, 58vw, 420px) !important; }
+  header p br, [data-ovnote] p br { display: none; }
+}
+
+@media (max-width: 640px) {
+  header { padding-top: clamp(104px, 26vw, 150px) !important; }
+  [data-ovsection] { padding-left: 20px !important; padding-right: 20px !important; }
+  [data-ovsection] > div > div { height: clamp(200px, 62vw, 340px) !important; border-radius: 12px !important; }
+  #sp-footgrid { grid-template-columns: minmax(0, 1fr) !important; gap: 34px !important; }
+  #sp-footgrid > div { margin-inline: 0 !important; align-items: flex-start !important; text-align: left !important; }
+  #sp-flogo { width: clamp(120px, 42vw, 180px) !important; }
+  #sp-quotetext { font-size: clamp(30px, 9.5vw, 46px) !important; letter-spacing: -.03em !important; }
+  #contact { padding-left: 20px !important; padding-right: 20px !important; }
+  #contact a[data-contact-trigger] { padding: 16px 26px !important; font-size: 12px !important; letter-spacing: .12em !important; }
+}
+
+@media (max-width: 380px) {
+  h1 { font-size: 32px !important; }
+  #sp-quotetext { font-size: 27px !important; }
+}
+
+    @keyframes sp-intro-draw{to{stroke-dashoffset:0}}
+    @keyframes sp-intro-fill{to{fill-opacity:1}}
+    @keyframes sp-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    @keyframes sp-spin{to{transform:rotate(360deg)}}
+    @keyframes sp-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  
+/* ── Mobile nav: logo left, menu right, desktop CTA folded into the menu ──
+   At phone widths the centred menu pill overlapped both the logo and the
+   CTA, so the bar becomes a simple two-item row. Contact is still one tap
+   away inside the menu. */
+@media (max-width: 760px) {
+  #sp-nav { padding: 14px 18px !important; }
+  #sp-nav > a:first-child img { height: 30px !important; }
+  #sp-nav > a:last-of-type { display: none !important; }
+  #sp-menuwrap {
+    left: auto !important;
+    right: 18px !important;
+    top: 12px !important;
+    transform: none !important;
+    width: min(230px, calc(100vw - 96px)) !important;
+  }
+  #sp-menubtn { width: 100% !important; padding: 0 16px !important; }
+  #sp-menubtn > span:last-child { display: none !important; }
+  #sp-menu a[data-menu-link] span:first-child { font-size: 20px !important; }
+}
+@media (max-width: 380px) {
+  #sp-menuwrap { width: min(190px, calc(100vw - 84px)) !important; }
+}
+
+/* The custom cursor and its trail are pointer-driven — dead weight on touch. */
+@media (hover: none) {
+  #sp-cursor, #sp-trail { display: none !important; }
+}
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#070807">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#070807"></rect>
+    <text x="600" y="470" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="300" fill="#FCFAF8">SD</text>
+    <rect x="440" y="540" width="320" height="10" fill="#C41F1E"></rect>
+  </svg>
+</template>
+</helmet>
+<div style="position:relative;background:#0D0A0A;color:#FCFAF8;overflow-x:clip">
+<div id="sp-grain" style="position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:url('data:image/svg+xml;utf8,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22&gt;&lt;filter id=%22n%22&gt;&lt;feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/&gt;&lt;/filter&gt;&lt;rect width=%22160%22 height=%22160%22 filter=%22url(%23n)%22 opacity=%220.6%22/&gt;&lt;/svg&gt;')"></div>
+<canvas id="sp-embers" data-embers="" style="position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;display:block;mix-blend-mode:screen"></canvas>
+<canvas id="sp-trail" style="position:fixed;inset:0;z-index:78;pointer-events:none;mix-blend-mode:screen;opacity:.9"></canvas>
+<div id="sp-cursor" style="position:fixed;top:0;left:0;z-index:80;width:12px;height:12px;border-radius:50%;background:#FCFAF8;mix-blend-mode:difference;pointer-events:none;opacity:0;display:flex;align-items:center;justify-content:center;transition:width .35s cubic-bezier(.22,1,.36,1),height .35s cubic-bezier(.22,1,.36,1)">
+  <span style="font-weight:500;font-size:10px;letter-spacing:.12em;color:#0D0A0A;opacity:0;transition:opacity .25s"></span>
+</div>
+
+<nav id="sp-nav" data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:20px clamp(20px,5vw,80px);background:transparent;border-bottom:none">
+  <a id="sp-logo" href="./index.html" aria-label="Shivam Panchal" style="display:flex;align-items:center;gap:9px;color:#FCFAF8;transition:color .45s ease,opacity .45s ease" style-hover="color:#FCFAF8;opacity:.75">
+    <img src="./uploads/SD logo-4f25ae85.svg" alt="Shivam Panchal" style="height:40px;width:auto;display:block;filter:brightness(0) invert(1)">
+  </a>
+  <div id="sp-menuwrap" style="position:absolute;left:50%;top:14px;transform:translateX(-50%);width:min(300px,calc(100vw - 40px));transition:width .7s cubic-bezier(.22,1,.36,1)">
+    <div id="sp-menu" style="border-radius:18px;background:rgba(28,24,23,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid #2E2927;overflow:hidden;max-height:56px;overscroll-behavior:contain;transition:max-height .7s cubic-bezier(.22,1,.36,1),box-shadow .5s ease">
+      <button id="sp-menubtn" type="button" style="all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;width:min(300px,calc(100vw - 40px));margin:0 auto;height:56px;padding:0 22px;cursor:pointer;color:#FCFAF8;font-family:'Switzer',sans-serif">
+        <span style="display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;letter-spacing:-.01em;flex:0 0 auto">
+          <span style="display:grid;grid-template-columns:4px 4px;gap:3px"><i style="width:4px;height:4px;border-radius:1px;background:#FCFAF8;display:block"></i><i style="width:4px;height:4px;border-radius:1px;background:#FCFAF8;display:block"></i><i style="width:4px;height:4px;border-radius:1px;background:#FCFAF8;display:block"></i><i style="width:4px;height:4px;border-radius:1px;background:#FCFAF8;display:block"></i></span>
+          Menu
+        </span>
+        <span style="font-size:13px;color:#8C8683;flex:0 0 auto;margin-left:auto">Open for projects</span>
+      </button>
+      <sc-for list="{{ menu }}" as="m" hint-placeholder-count="4">
+        <a href="{{ m.href }}" data-menu-link="" style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 22px;border-top:1px solid #2E2927;transition:background .4s ease" style-hover="background:rgba(252,250,248,.05)">
+          <span style="font-size:23px;font-weight:600;letter-spacing:-.02em">{{ m.label }}</span>
+          <span style="width:30px;height:30px;border-radius:999px;flex:0 0 auto;display:grid;place-items:center;border:1px solid #2E2927;color:#8C8683">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 10 10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </span>
+        </a>
+      </sc-for>
+      <div style="padding:20px 22px 24px;border-top:1px solid #2E2927;display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;letter-spacing:.1em;color:#8C8683">PRINT</span>
+        <a href="https://www.behance.net/shivampanchal3" target="_blank" rel="noreferrer" style="font-size:15px">Behance</a>
+        <a href="https://www.linkedin.com/in/shivam-panchal-b58161186" target="_blank" rel="noreferrer" style="font-size:15px">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+  <a href="#contact" data-contact-trigger="" data-cursor="GO" style="display:inline-flex;align-items:center;gap:8px;background:#E8312F;color:#FFECEB;border-radius:999px;padding:14px 24px;font-size:14px;font-weight:600;letter-spacing:-.01em;transition:opacity .4s ease" style-hover="opacity:.85;color:#0D0A0A">✦ Get in touch</a>
+</nav>
+<div id="sp-cscrim" style="position:fixed;inset:0;z-index:98;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .55s cubic-bezier(.22,1,.36,1)"></div>
+<aside id="sp-cpanel" role="dialog" aria-modal="true" aria-label="Start a project" style="position:fixed;top:0;right:0;bottom:0;z-index:99;width:min(460px,100vw);background:#070807;border-left:1px solid #2E2927;box-shadow:-40px 0 90px rgba(0,0,0,.6);transform:translate3d(101%,0,0);transition:transform .72s cubic-bezier(.22,1,.36,1);overflow-y:auto;overscroll-behavior:contain;will-change:transform">
+  <div style="display:flex;flex-direction:column;gap:16px;padding:clamp(22px,4vw,38px) clamp(20px,4vw,34px) 36px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px">
+      <h2 style="margin:0;font-size:clamp(28px,4.4vw,40px);font-weight:600;line-height:1.05;letter-spacing:-.03em;text-wrap:pretty">Let's build the future<br>of your brand.</h2>
+      <button id="sp-cclose" type="button" aria-label="Close" data-cursor="CLOSE" style="appearance:none;cursor:pointer;flex:0 0 auto;width:34px;height:34px;border-radius:999px;border:1px solid #2E2927;background:#1C1817;color:#FCFAF8;display:grid;place-items:center;transition:background .3s ease,transform .3s ease" style-hover="background:#2E2927;transform:rotate(90deg)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <span style="font-size:12.5px;color:#8C8683">Personal info</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px">
+        <input type="text" placeholder="Your name" style="box-sizing:border-box;width:100%;appearance:none;border:1px solid #2E2927;border-radius:11px;background:#1C1817;color:#FCFAF8;font-family:inherit;font-size:14.5px;padding:13px 16px;outline:none;transition:border-color .3s ease" style-focus="border-color:#E8312F">
+        <input type="email" placeholder="Email" style="box-sizing:border-box;width:100%;appearance:none;border:1px solid #2E2927;border-radius:11px;background:#1C1817;color:#FCFAF8;font-family:inherit;font-size:14.5px;padding:13px 16px;outline:none;transition:border-color .3s ease" style-focus="border-color:#E8312F">
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <span style="font-size:12.5px;color:#8C8683">What we build?</span>
+      <div data-cgroup="scope" style="display:flex;flex-wrap:wrap;gap:8px">
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Website</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Mobile App</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Branding</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Campaign</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Other</button>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <span style="font-size:12.5px;color:#8C8683">Budget range</span>
+      <div data-cgroup="budget" data-csingle="1" style="display:flex;flex-wrap:wrap;gap:8px">
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">$5K–15K</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">$15K–40K</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">$40K+</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Other</button>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <span style="font-size:12.5px;color:#8C8683">Timeline</span>
+      <div data-cgroup="timeline" data-csingle="1" style="display:flex;flex-wrap:wrap;gap:8px">
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Urgent</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">1–2 months</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">3+ months</button>
+        <button type="button" data-cchip="" style="appearance:none;cursor:pointer;border:1px solid #2E2927;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:14px;background:#1C1817;color:#8C8683;transition:background .3s ease,color .3s ease,border-color .3s ease">Flexible</button>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <span style="font-size:12.5px;color:#8C8683">Project details</span>
+      <textarea rows="4" placeholder="Tell me about the project — goals, who it's for, what's not working right now. The more context you give me, the more useful my first reply will be." style="box-sizing:border-box;width:100%;resize:vertical;appearance:none;border:1px solid #2E2927;border-radius:12px;background:#1C1817;color:#FCFAF8;font-family:inherit;font-size:14.5px;line-height:1.5;padding:15px;outline:none;transition:border-color .3s ease" style-focus="border-color:#E8312F"></textarea>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <button type="button" data-cursor="SEND" style="appearance:none;cursor:pointer;border:0;border-radius:999px;width:100%;padding:16px;font-family:inherit;font-size:16px;font-weight:500;background:#FCFAF8;color:#070807;transition:background .35s ease" style-hover="background:#FF6B69">Send enquiry</button>
+      <span style="text-align:center;font-size:12.5px;color:#8C8683">By submitting, you agree to my <a href="#" style="color:#FCFAF8;text-decoration:underline">privacy policy.</a></span>
+    </div>
+  </div>
+</aside>
+
+<header style="position:relative;z-index:2;padding:clamp(140px,16vw,210px) clamp(20px,5vw,80px) clamp(30px,4vw,54px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(18px,2vw,28px)">
+  <h1 data-anim="" style="margin:0;font-size:clamp(38px,6vw,74px);line-height:1.02;letter-spacing:-.04em;font-weight:600">Print Collateral</h1>
+  <span data-anim="" style="font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(252,250,248,.5)">Brochures, decks · 2023</span>
+  <div data-anim="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:clamp(20px,3vw,54px);max-width:820px;width:100%;margin-top:clamp(8px,1.4vw,18px);text-align:left">
+    <p style="margin:0;font-size:15.5px;line-height:1.6;color:rgba(252,250,248,.62)">Brochures, catalogues and event collateral held together by one editorial system — a grid, a type hierarchy and image rules that survive any page count.</p>
+    <p style="margin:0;font-size:15.5px;line-height:1.6;color:rgba(252,250,248,.62)">Art direction through to press: layout, retouching direction, prepress checks and printer liaison, delivered as templates teams reuse each cycle.</p>
+  </div>
+</header>
+
+<section data-anim="" style="position:relative;z-index:2;padding:0 clamp(20px,5vw,80px) clamp(50px,7vw,100px)">
+  <div style="position:relative;overflow:hidden;border-radius:clamp(14px,2vw,26px);background:#1C1817;border:1px solid #2E2927;height:clamp(300px,58vw,760px)">
+    <img src="./uploads/print%20collateral.webp" alt="Print Collateral" style="width:100%;height:100%;object-fit:cover;display:block">
+  </div>
+</section>
+
+<section data-anim="" data-ovsection="" style="position:relative;z-index:2;max-width:none;margin:0 auto;padding:0 clamp(20px,5vw,80px) clamp(60px,8vw,120px);display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(24px,3vw,54px);align-items:start">
+  <div style="order:2;display:flex;flex-direction:column;gap:clamp(10px,1.4vw,18px);min-width:0">
+    <sc-for list="{{ overview }}" as="o" hint-placeholder-count="10">
+      <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; height: clamp(340px,46vw,760px); width: 100%">
+        <image-slot id="pr-ov-{{ o.id }}" shape="rect" placeholder="{{ o.label }}" style="width: 100%"></image-slot>
+      </div>
+    </sc-for>
+  </div>
+  <div data-ovnote="" style="order:1;position:sticky;top:96px;display:flex;flex-direction:column;gap:14px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#FF6B69">Overview</span>
+    <p style="margin:0;font-size:15.5px;line-height:1.6;color:rgba(252,250,248,.62)">One master grid across every format, so a four-page flyer and a forty-page catalogue read as the same brand.</p>
+    <p style="margin:0;font-size:15.5px;line-height:1.6;color:rgba(252,250,248,.45)">Print-ready from the first file — bleeds, colour profiles and stock choices resolved in design, not in correction rounds.</p>
+    <a href="./index.html#work" style="align-self:flex-start;margin-top:clamp(4px,1vw,12px);display:inline-flex;align-items:center;gap:10px;border:1px solid #2E2927;border-radius:999px;padding:12px 20px;font-size:13.5px;font-weight:500" style-hover="border-color:#FF6B69;color:#FF6B69">
+      Back to all work
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12.5 5.5 19 12l-6.5 6.5"></path></svg>
+    </a>
+  </div>
+</section>
+<section data-anim="" style="position:relative;z-index:2;padding:clamp(40px,5vw,72px) clamp(20px,5vw,80px) clamp(60px,8vw,110px)">
+  <div style="max-width:1360px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(20px,2.4vw,34px)">
+    <span style="font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(252,250,248,.4)">Next project</span>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(16px,2vw,26px)">
+      <a href="./logos.html" data-cursor="VIEW" style="display:flex;flex-direction:column;gap:16px;color:inherit">
+        <div style="position:relative;overflow:hidden;border-radius:16px;background:#1C1817;width:100%;height:clamp(320px,34vw,560px)">
+          <div data-np-img="" style="position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.22,1,.36,1)">
+            <img src="./uploads/Logos.webp" alt="Logos" style="width:100%;height:100%;object-fit:cover;display:block">
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:baseline;gap:14px">
+            <span style="font-size:16px;font-weight:600;letter-spacing:-.01em;color:#FCFAF8">Logos</span>
+            <span style="margin-left:auto;font-size:15px;font-weight:400;color:rgba(252,250,248,.72);font-variant-numeric:tabular-nums;flex:0 0 auto">2024</span>
+          </div>
+          <span style="font-size:15px;font-weight:400;letter-spacing:-.005em;color:rgba(252,250,248,.55)">Identity, guidelines</span>
+        </div>
+      </a>
+      <a href="./packaging-3d.html" data-cursor="VIEW" style="display:flex;flex-direction:column;gap:16px;color:inherit">
+        <div style="position:relative;overflow:hidden;border-radius:16px;background:#1C1817;width:100%;height:clamp(320px,34vw,560px)">
+          <div data-np-img="" style="position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.22,1,.36,1)">
+            <img src="./uploads/Packaging.webp" alt="Packaging 3D" style="width:100%;height:100%;object-fit:cover;display:block">
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:baseline;gap:14px">
+            <span style="font-size:16px;font-weight:600;letter-spacing:-.01em;color:#FCFAF8">Packaging 3D</span>
+            <span style="margin-left:auto;font-size:15px;font-weight:400;color:rgba(252,250,248,.72);font-variant-numeric:tabular-nums;flex:0 0 auto">2025</span>
+          </div>
+          <span style="font-size:15px;font-weight:400;letter-spacing:-.005em;color:rgba(252,250,248,.55)">Label design, 3D renders</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+<footer data-screen-label="Footer" style="position:relative;background:#070807;color:#FCFAF8;overflow:hidden">
+  <aurora-bg color-stops="#C41F1E,#C41F1E,#C41F1E" blend="0.5" amplitude="1.0" speed="0.5" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.7;z-index:0;transform:scaleY(-1)"></aurora-bg>
+  <div id="sp-footgrid" style="position:relative;z-index:1;border-top:1px solid #2E2927;padding:clamp(54px,7vw,96px) clamp(24px,5vw,80px) clamp(28px,3vw,44px);max-width:1360px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:clamp(38px,5vw,72px);align-items:start">
+    <div style="display:flex;flex-direction:column;gap:26px;max-width:46ch">
+      <a href="#top" id="sp-flogo" aria-label="Shivam Panchal" style="display:block;width:clamp(150px,17vw,240px)">
+        <img src="./uploads/SD logo-4f25ae85.svg" alt="Shivam Panchal" style="width:100%;height:auto;display:block;filter:brightness(0) invert(1);animation:sp-float 7s ease-in-out infinite;transition:filter .5s ease,transform .7s cubic-bezier(.22,1,.36,1)">
+      </a>
+      <p style="margin:0;font-size:clamp(14px,1.1vw,16px);line-height:1.6;color:#8C8683;text-wrap:pretty">Lead Designer — Brand &amp; Product. 10+ years shaping brand identity, design systems, campaigns and product UI. Twelve AI tools in the daily workflow; the calls are still mine.</p>
+      <span style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;align-self:flex-start;font-family:'Switzer',sans-serif;font-weight:400;font-size:16px;letter-spacing:-.01em;color:#FCFAF8">
+        <span style="display:inline-flex;align-items:center;gap:8px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex:0 0 auto"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"></circle><path d="M12 1.6v2.6M12 19.8v2.6M22.4 12h-2.6M4.2 12H1.6M19.35 4.65l-1.85 1.85M6.5 17.5l-1.85 1.85M19.35 19.35l-1.85-1.85M6.5 6.5L4.65 4.65" style="transform-box:fill-box;transform-origin:50% 50%;animation:sp-spin 12s linear infinite"></path></svg>
+          <span id="sp-footclock" style="font-variant-numeric:tabular-nums">--:--</span>
+        </span>
+        <span id="sp-footdate" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5)">Delhi, IN</span>
+      </span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(252,250,248,.4)">Contact</span>
+      <a href="mailto:shivampanchal149@gmail.com" style="font-size:clamp(17px,1.5vw,21px);font-weight:500;letter-spacing:-.02em;color:#FCFAF8" style-hover="color:#FF6B69">shivampanchal149@gmail.com</a>
+      <a href="tel:+919760502836" style="font-size:15px;color:#8C8683" style-hover="color:#FCFAF8">+91 97605 02836</a>
+      <span style="font-size:15px;line-height:1.55;color:#8C8683">633, Aerocity, Sector-66B<br>Mohali, Punjab · India</span>
+      <span style="display:inline-flex;align-items:center;gap:10px;align-self:flex-start;margin-top:4px;border:1px solid #2E2927;border-radius:999px;padding:9px 16px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(252,250,248,.62)">
+        <span style="width:7px;height:7px;border-radius:999px;background:#2F6B4F;box-shadow:0 0 0 4px rgba(47,107,79,.18)"></span>
+        Available for new projects
+      </span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(252,250,248,.4);padding-bottom:12px">Elsewhere</span>
+        <a href="https://www.behance.net/shivampanchal3" target="_blank" rel="noreferrer" aria-label="Behance" data-soc="" style="display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #2E2927;color:#8C8683;font-size:14.5px;font-weight:500;transition:color .35s ease,padding-left .45s cubic-bezier(.22,1,.36,1)" style-hover="color:#FCFAF8;padding-left:8px">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><path d="M8.8 5.5H3v13h6.1c3 0 4.9-1.4 4.9-3.9 0-1.8-1.1-2.9-2.6-3.2 1.2-.4 2-1.4 2-2.8 0-2.1-1.6-3.1-4.6-3.1Zm-.4 5.2H5.7V7.6h2.6c1.2 0 1.9.5 1.9 1.5s-.7 1.6-1.8 1.6Zm.3 5.6H5.7v-3.4h3c1.3 0 2.1.6 2.1 1.7s-.8 1.7-2.1 1.7ZM21 13.7c0-2.7-1.6-4.7-4.3-4.7-2.6 0-4.4 2-4.4 4.8 0 2.9 1.8 4.8 4.5 4.8 2.1 0 3.6-1.1 4.1-3h-2.4c-.2.7-.8 1.1-1.6 1.1-1.2 0-1.9-.8-2-2.1H21v-.9Zm-6.1-.8c.2-1.1.9-1.8 1.8-1.8 1 0 1.7.7 1.8 1.8h-3.6ZM15 6.3h4.9v1.5H15V6.3Z" fill="currentColor"></path></svg>
+          Behance
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:auto;flex:0 0 auto;opacity:.55"><path d="M2 10 10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/shivam-panchal-b58161186" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-soc="" style="display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #2E2927;color:#8C8683;font-size:14.5px;font-weight:500;transition:color .35s ease,padding-left .45s cubic-bezier(.22,1,.36,1)" style-hover="color:#FCFAF8;padding-left:8px">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.15 1.45-2.15 2.96V21h-4V9Z" fill="currentColor"></path></svg>
+          LinkedIn
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:auto;flex:0 0 auto;opacity:.55"><path d="M2 10 10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" data-soc="" style="display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #2E2927;color:#8C8683;font-size:14.5px;font-weight:500;transition:color .35s ease,padding-left .45s cubic-bezier(.22,1,.36,1)" style-hover="color:#FCFAF8;padding-left:8px">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><path d="M12 2.2c-2.7 0-3 0-4.1.06-1.05.05-1.77.22-2.4.46a4.8 4.8 0 0 0-1.75 1.13A4.8 4.8 0 0 0 2.62 5.6c-.24.63-.4 1.35-.46 2.4C2.1 9.1 2.1 9.4 2.1 12s0 2.9.06 4c.05 1.05.22 1.77.46 2.4a4.8 4.8 0 0 0 1.13 1.75 4.8 4.8 0 0 0 1.75 1.13c.63.24 1.35.4 2.4.46 1.1.06 1.4.06 4.1.06s3 0 4.1-.06c1.05-.05 1.77-.22 2.4-.46a5 5 0 0 0 2.88-2.88c.24-.63.4-1.35.46-2.4.06-1.1.06-1.4.06-4s0-2.9-.06-4c-.05-1.05-.22-1.77-.46-2.4a4.8 4.8 0 0 0-1.13-1.75 4.8 4.8 0 0 0-1.75-1.13c-.63-.24-1.35-.4-2.4-.46-1.1-.06-1.4-.06-4.1-.06Zm0 1.8c2.65 0 2.96 0 4 .06.9.04 1.38.19 1.7.31.43.17.74.37 1.06.69.32.32.52.63.69 1.06.12.32.27.8.31 1.7.05 1.04.06 1.35.06 4s-.01 2.96-.06 4c-.04.9-.19 1.38-.31 1.7-.17.43-.37.74-.69 1.06-.32.32-.63.52-1.06.69-.32.12-.8.27-1.7.31-1.04.05-1.35.06-4 .06s-2.96-.01-4-.06c-.9-.04-1.38-.19-1.7-.31a2.9 2.9 0 0 1-1.06-.69 2.9 2.9 0 0 1-.69-1.06c-.12-.32-.27-.8-.31-1.7-.05-1.04-.06-1.35-.06-4s.01-2.96.06-4c.04-.9.19-1.38.31-1.7.17-.43.37-.74.69-1.06.32-.32.63-.52 1.06-.69.32-.12.8-.27 1.7-.31 1.04-.05 1.35-.06 4-.06Zm0 3.06a4.94 4.94 0 1 0 0 9.88 4.94 4.94 0 0 0 0-9.88Zm0 8.14a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm6.29-8.34a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0Z" fill="currentColor"></path></svg>
+          Instagram
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:auto;flex:0 0 auto;opacity:.55"><path d="M2 10 10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:1;overflow:hidden;padding:clamp(6px,1vw,14px) 0 0;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)">
+    <div style="display:flex;width:max-content;animation:sp-marquee 34s linear infinite">
+      <span style="display:flex;align-items:baseline;gap:clamp(24px,4vw,64px);padding-right:clamp(24px,4vw,64px);font-size:clamp(58px,11vw,168px);line-height:.92;letter-spacing:-.05em;font-weight:800;color:transparent;-webkit-text-stroke:1px rgba(252,250,248,.13)">
+        <span>Shivam Panchal</span><span style="-webkit-text-stroke:1px rgba(232,49,47,.32)">Shivam Panchal</span>
+      </span>
+      <span aria-hidden="true" style="display:flex;align-items:baseline;gap:clamp(24px,4vw,64px);padding-right:clamp(24px,4vw,64px);font-size:clamp(58px,11vw,168px);line-height:.92;letter-spacing:-.05em;font-weight:800;color:transparent;-webkit-text-stroke:1px rgba(252,250,248,.13)">
+        <span>Shivam Panchal</span><span style="-webkit-text-stroke:1px rgba(232,49,47,.32)">Shivam Panchal</span>
+      </span>
+    </div>
+  </div>
+  <div style="position:relative;z-index:1;border-top:1px solid #2E2927;padding:20px clamp(24px,5vw,80px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;font-weight:500;font-size:12px;letter-spacing:.02em">
+    <span style="color:#8C8683">© 2026 Shivam Panchal · shivamdesign.com · Privacy policy</span>
+    <a href="#top" style="display:inline-flex;align-items:center;gap:8px;color:#8C8683" style-hover="color:#FCFAF8">
+      Back to top
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"></path></svg>
+    </a>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  setupEmbers() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('[data-embers]').forEach(c => this.embersOn(c));
+  }
+  embersOn(cvs) {
+    if (!cvs) return;
+    const host = cvs.parentElement;
+    const ctx = cvs.getContext('2d');
+    const COLORS = ['#E8312F', '#FF6B69', '#C41F1E', '#E8312F'];
+    const COUNT = 44;
+    const sprite = {};
+    const glowOf = col => {
+      if (sprite[col]) return sprite[col];
+      const S = 24, c = document.createElement('canvas');
+      c.width = c.height = S;
+      const g = c.getContext('2d');
+      const rg = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+      rg.addColorStop(0, col); rg.addColorStop(0.28, col); rg.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = rg; g.fillRect(0, 0, S, S);
+      sprite[col] = c;
+      return c;
+    };
+    let w = 0, h = 0, ps = [], raf = 0, alive = true;
+    const mk = init => ({
+      x: Math.random() * w,
+      y: init ? Math.random() * h : h + 10,
+      r: Math.random() * 1.5 + 0.6,
+      vy: Math.random() * 0.3 + 0.1,
+      o: Math.random() * 0.55 + 0.25,
+      a: Math.random() * Math.PI * 2,
+      as: Math.random() * 0.02 + 0.005,
+      c: COLORS[(Math.random() * COLORS.length) | 0]
+    });
+    const fixed = getComputedStyle(cvs).position === 'fixed';
+    const resize = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      if (fixed) { w = innerWidth; h = innerHeight; }
+      else { const r = host.getBoundingClientRect(); w = r.width; h = r.height; }
+      cvs.width = w * dpr; cvs.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ps = Array.from({ length: COUNT }, () => mk(true));
+    };
+    resize();
+    let ro = null;
+    if (fixed) addEventListener('resize', resize);
+    else { ro = new ResizeObserver(resize); ro.observe(host); }
+    const tick = () => {
+      if (!alive) return;
+      raf = requestAnimationFrame(tick);
+      if (document.hidden) return;
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalAlpha = 1;
+      for (const p of ps) {
+        p.y -= p.vy;
+        p.x += Math.sin(p.a) * 0.2;
+        p.a += p.as;
+        if (p.y < -10) Object.assign(p, mk(false));
+        ctx.globalAlpha = Math.max(0, Math.min(1, p.o * (0.6 + 0.4 * Math.sin(p.a))));
+        const d = p.r * 9;
+        ctx.drawImage(glowOf(p.c), p.x - d / 2, p.y - d / 2, d, d);
+      }
+    };
+    tick();
+    this.cleanup.push(() => { alive = false; cancelAnimationFrame(raf); if (ro) ro.disconnect(); removeEventListener('resize', resize); });
+  }
+
+  signFooterLogo() {
+    const fl = document.getElementById('sp-flogo');
+    if (!fl) return;
+    const img = fl.querySelector('img');
+    const src = img && img.getAttribute('src');
+    if (!src) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    fetch(src).then(r => r.text()).then(txt => {
+      const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+      const svg = doc.querySelector('svg');
+      if (!svg) return;
+      svg.setAttribute('style', 'width:100%;height:auto;display:block;overflow:visible');
+      const paths = Array.from(svg.querySelectorAll('path'));
+      if (!paths.length) return;
+      paths.forEach(p => {
+        p.setAttribute('pathLength', '1');
+        p.setAttribute('fill', '#FCFAF8');
+        p.setAttribute('stroke', '#FCFAF8');
+        p.setAttribute('stroke-width', '1');
+        p.setAttribute('stroke-linecap', 'round');
+        p.setAttribute('stroke-linejoin', 'round');
+        p.setAttribute('vector-effect', 'non-scaling-stroke');
+      });
+      fl.replaceChildren(svg);
+
+      // pace each stroke by its real length so the nib moves at one constant speed
+      const lens = paths.map(p => { try { return p.getTotalLength() || 1; } catch (e) { return 1; } });
+      const total = lens.reduce((a, b) => a + b, 0);
+      const reset = () => {
+        paths.forEach(p => {
+          p.style.animation = 'none';
+          p.style.fillOpacity = '0';
+          p.style.strokeDasharray = '1';
+          p.style.strokeDashoffset = '1';
+        });
+        void svg.getBoundingClientRect();
+      };
+      const write = () => {
+        reset();
+        const WRITE = 2.1, GAP = 0.035;
+        let at = 0.05;
+        paths.forEach((p, i) => {
+          const dur = Math.max(0.09, (lens[i] / total) * WRITE);
+          p.style.animation = 'sp-intro-draw ' + dur.toFixed(3) + 's linear ' + at.toFixed(3) + 's forwards';
+          at += dur + GAP;
+        });
+        paths.forEach(p => { p.style.animation += ', sp-intro-fill .5s ease ' + (at + 0.12).toFixed(3) + 's forwards'; });
+      };
+      // author it VISIBLE — the draw is an enhancement, never a gate on visibility
+      const show = () => paths.forEach(p => { p.style.animation = 'none'; p.style.fillOpacity = '1'; p.style.strokeDasharray = 'none'; p.style.strokeDashoffset = '0'; });
+      show();
+
+      let played = false;
+      const trigger = () => {
+        if (played) return;
+        const r = fl.getBoundingClientRect();
+        if (r.top < innerHeight * 0.95 && r.bottom > -400) { played = true; write(); }
+      };
+      trigger();
+      addEventListener('scroll', trigger, { passive: true });
+      const failsafe = setTimeout(() => { if (!played) { played = true; show(); } }, 2000);
+      const again = () => { played = true; write(); };
+      fl.addEventListener('pointerenter', again);
+      this.cleanup.push(() => { clearTimeout(failsafe); removeEventListener('scroll', trigger); fl.removeEventListener('pointerenter', again); });
+    }).catch(() => {});
+  }
+
+  wireContactDrawer() {
+    const panel = document.getElementById('sp-cpanel');
+    const scrim = document.getElementById('sp-cscrim');
+    if (!panel || !scrim) return;
+    const triggers = Array.from(document.querySelectorAll('[data-contact-trigger]'));
+    const open = () => {
+      panel.style.transform = 'translate3d(0,0,0)';
+      scrim.style.opacity = '1';
+      scrim.style.pointerEvents = 'auto';
+      document.documentElement.style.overflow = 'hidden';
+      const f = panel.querySelector('input');
+      if (f) setTimeout(() => f.focus({ preventScroll: true }), 520);
+    };
+    const close = () => {
+      panel.style.transform = 'translate3d(101%,0,0)';
+      scrim.style.opacity = '0';
+      scrim.style.pointerEvents = 'none';
+      document.documentElement.style.overflow = '';
+    };
+    const onCta = e => { e.preventDefault(); open(); };
+    triggers.forEach(el => el.addEventListener('click', onCta));
+    scrim.addEventListener('click', close);
+    const closeBtn = document.getElementById('sp-cclose');
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    const onKey = e => { if (e.key === 'Escape') close(); };
+    document.addEventListener('keydown', onKey);
+
+    const onChip = e => {
+      const chip = e.target.closest('[data-cchip]');
+      if (!chip || !panel.contains(chip)) return;
+      const group = chip.closest('[data-cgroup]');
+      if (!group) return;
+      const single = group.hasAttribute('data-csingle');
+      const pill = group.hasAttribute('data-csingle') && group.style.borderRadius === '999px';
+      const paint = (el, on) => {
+        el.dataset.on = on ? '1' : '';
+        el.style.background = on ? '#FCFAF8' : (pill ? 'transparent' : '#1C1817');
+        el.style.color = on ? '#070807' : '#8C8683';
+        if (!pill) el.style.borderColor = on ? '#FCFAF8' : '#2E2927';
+      };
+      if (single) {
+        group.querySelectorAll('[data-cchip]').forEach(el => paint(el, el === chip));
+      } else {
+        paint(chip, chip.dataset.on !== '1');
+      }
+    };
+    panel.addEventListener('click', onChip);
+
+    this.cleanup.push(() => {
+      triggers.forEach(el => el.removeEventListener('click', onCta));
+      scrim.removeEventListener('click', close);
+      if (closeBtn) closeBtn.removeEventListener('click', close);
+      document.removeEventListener('keydown', onKey);
+      panel.removeEventListener('click', onChip);
+      document.documentElement.style.overflow = '';
+    });
+  }
+  wireBackToWork() {
+    const links = Array.from(document.querySelectorAll('a[href*="index.html#work"]'));
+    if (!links.length) return;
+    const go = e => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      // came from the homepage? step back — the document is restored from cache,
+      // so there is no reload and the previous scroll position is kept.
+      const ref = document.referrer || '';
+      if (history.length > 1 && ref.indexOf('Shivam Panchal Portfolio') >= 0) { history.back(); return; }
+      location.href = e.currentTarget.getAttribute('href');
+    };
+    links.forEach(a => a.addEventListener('click', go));
+    this.cleanup.push(() => links.forEach(a => a.removeEventListener('click', go)));
+  }
+  wireSeamlessExit() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const root = document.getElementById('sp-root') || document.body;
+    const links = Array.from(document.querySelectorAll('a[href$=".dc.html"], a[href*=".dc.html#"]'))
+      .filter(a => (a.getAttribute('href') || '').indexOf('Portfolio.dc.html#work') < 0);
+    const go = e => {
+      const a = e.currentTarget;
+      const href = a.getAttribute('href');
+      if (!href || e.metaKey || e.ctrlKey || e.shiftKey || a.target === '_blank') return;
+      e.preventDefault();
+      root.style.transition = 'opacity .32s cubic-bezier(.4,0,.2,1)';
+      root.style.opacity = '0';
+      setTimeout(() => { location.href = href; }, 300);
+    };
+    links.forEach(a => a.addEventListener('click', go));
+    this.cleanup.push(() => links.forEach(a => a.removeEventListener('click', go)));
+  }
+  fadePageIn() {
+    const r = document.getElementById('sp-root') || document.body;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    r.style.opacity = '0';
+    requestAnimationFrame(() => {
+      r.style.transition = 'opacity .5s cubic-bezier(.22,1,.36,1)';
+      r.style.opacity = '1';
+    });
+  }
+  componentDidMount() {
+    this.cleanup = [];
+    const fine = matchMedia('(pointer:fine)').matches;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = reducedMotion;
+
+    this.fadePageIn();
+    this.wireSeamlessExit();
+    this.wireBackToWork();
+    this.setupEmbers();
+    this.signFooterLogo();
+    this.wireContactDrawer();
+    {
+      const tz = 'Asia/Kolkata';
+      const tickClock = () => {
+        const now = new Date();
+        const fc = document.getElementById('sp-footclock'), fd = document.getElementById('sp-footdate');
+        if (fc) fc.textContent = now.toLocaleTimeString('en-US', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase();
+        if (fd) fd.textContent = now.toLocaleDateString('en-GB', { timeZone: tz, weekday: 'short', day: 'numeric', month: 'short' }) + ' · Delhi, IN';
+      };
+      tickClock();
+      const ci = setInterval(tickClock, 1000);
+      this.cleanup.push(() => clearInterval(ci));
+    }
+    const cur = document.getElementById('sp-cursor');
+    if (fine && cur) {
+      document.body.style.cursor = 'none';
+      const lbl = cur.firstElementChild;
+      let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y, raf;
+      const mv = e => {
+        x = e.clientX; y = e.clientY;
+        const t = e.target.closest && e.target.closest('[data-cursor]');
+        if (t) { cur.style.width = cur.style.height = '76px'; lbl.textContent = t.getAttribute('data-cursor'); lbl.style.opacity = '1'; }
+        else if (e.target.closest && e.target.closest('a,button')) { cur.style.width = cur.style.height = '44px'; lbl.style.opacity = '0'; }
+        else { cur.style.width = cur.style.height = '12px'; lbl.style.opacity = '0'; }
+      };
+      addEventListener('mousemove', mv, { passive: true });
+      const loop = () => { cx += (x - cx) * .18; cy += (y - cy) * .18; cur.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)'; raf = requestAnimationFrame(loop); };
+      loop();
+      cur.style.opacity = '1';
+      this.cleanup.push(() => { removeEventListener('mousemove', mv); cancelAnimationFrame(raf); });
+    }
+    const trail = document.getElementById('sp-trail');
+    if (fine && trail && !reduced) {
+      const ctx = trail.getContext('2d');
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const N = 26;
+      const DARK = [232, 49, 47], LIGHT = [196, 31, 30];
+      let COL = DARK, lightBg = false;
+      const probe = () => {
+        const el = document.elementFromPoint(Math.max(0, Math.min(innerWidth - 1, tx)), Math.max(0, Math.min(innerHeight - 1, ty)));
+        let n = el, bg = '';
+        while (n && n !== document.documentElement) {
+          const c = getComputedStyle(n).backgroundColor;
+          if (c && c !== 'transparent') {
+            const am = c.match(/rgba?\([^)]*?(?:,\s*([\d.]+))?\)$/);
+            const al = am && am[1] !== undefined ? parseFloat(am[1]) : 1;
+            if (al >= 0.5) { bg = c; break; }
+          }
+          n = n.parentElement;
+        }
+        const m = bg.match(/(\d+),\s*(\d+),\s*(\d+)/);
+        const lum = m ? (0.299 * +m[1] + 0.587 * +m[2] + 0.114 * +m[3]) : 0;
+        const isLight = lum > 140;
+        if (isLight !== lightBg) {
+          lightBg = isLight;
+          COL = isLight ? LIGHT : DARK;
+          trail.style.mixBlendMode = isLight ? 'multiply' : 'screen';
+        }
+      };
+      const nodes = Array.from({ length: N }, () => ({ x: innerWidth / 2, y: innerHeight / 2 }));
+      let tx = innerWidth / 2, ty = innerHeight / 2, raf2, alive = true, probeTick = 0;
+      let vis = 0, ptx = tx, pty = ty;
+      const size = () => { trail.width = innerWidth * dpr; trail.height = innerHeight * dpr; ctx.scale(dpr, dpr); };
+      size();
+      const onRz = () => { ctx.setTransform(1, 0, 0, 1, 0, 0); size(); };
+      const onMv = e => { tx = e.clientX; ty = e.clientY; };
+      addEventListener('mousemove', onMv, { passive: true });
+      addEventListener('resize', onRz);
+      const loop = () => {
+        if (!alive) return;
+        raf2 = requestAnimationFrame(loop);
+        if (++probeTick % 8 === 0) probe();
+        const sp = Math.hypot(tx - ptx, ty - pty);
+        ptx = tx; pty = ty;
+        vis += (Math.min(1, sp / 9) - vis) * (sp > 1 ? 0.3 : 0.08);
+        nodes[0].x += (tx - nodes[0].x) * 0.32;
+        nodes[0].y += (ty - nodes[0].y) * 0.32;
+        for (let i = 1; i < N; i++) {
+          const p = nodes[i - 1], c = nodes[i], e = 0.34 - i * 0.006;
+          c.x += (p.x - c.x) * e;
+          c.y += (p.y - c.y) * e;
+        }
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        if (vis < 0.02) return;
+        ctx.lineCap = ctx.lineJoin = 'round';
+        for (let i = 1; i < N; i++) {
+          const a = nodes[i - 1], b = nodes[i];
+          const t = 1 - i / N;
+          ctx.strokeStyle = 'rgba(' + COL[0] + ',' + COL[1] + ',' + COL[2] + ',' + ((lightBg ? 0.34 : 0.5) * t * t * vis).toFixed(3) + ')';
+          ctx.lineWidth = 16 * t * t + 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.quadraticCurveTo(a.x, a.y, (a.x + b.x) / 2, (a.y + b.y) / 2);
+          ctx.stroke();
+        }
+      };
+      loop();
+      this.cleanup.push(() => { alive = false; cancelAnimationFrame(raf2); removeEventListener('mousemove', onMv); removeEventListener('resize', onRz); });
+    }
+
+    const els = Array.from(document.querySelectorAll('[data-anim]'));
+    const reveal = el => {
+      if (el.dataset.smShown) return;
+      el.dataset.smShown = '1';
+      el.style.opacity = '1';
+      el.style.animation = 'sm-rise .9s cubic-bezier(.22,1,.36,1) forwards';
+    };
+    if (reducedMotion) { els.forEach(el => { el.style.opacity = '1'; }); }
+    else {
+      els.forEach(el => { el.style.opacity = '0'; });
+      // reveal whatever is already on screen right away
+      const sweep = () => els.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < innerHeight * 0.95 && r.bottom > 0) reveal(el);
+      });
+      sweep();
+      const onScroll = () => sweep();
+      addEventListener('scroll', onScroll, { passive: true });
+      addEventListener('resize', onScroll);
+      // hard fallback: nothing stays hidden
+      this.failsafe = setTimeout(() => els.forEach(reveal), 2500);
+      this.offScroll = () => { removeEventListener('scroll', onScroll); removeEventListener('resize', onScroll); };
+    }
+
+    const menu = document.getElementById('sp-menu');
+    const mbtn = document.getElementById('sp-menubtn');
+    if (menu && mbtn) {
+      let open = false;
+      const wrap = document.getElementById('sp-menuwrap');
+      const measure = () => {
+        const prev = menu.style.maxHeight;
+        menu.style.transition = 'none';
+        menu.style.maxHeight = 'none';
+        const h = menu.scrollHeight;
+        menu.style.maxHeight = prev;
+        void menu.offsetHeight;
+        menu.style.transition = 'max-height .7s cubic-bezier(.22,1,.36,1),box-shadow .5s ease';
+        return h;
+      };
+      const set = v2 => {
+        open = v2;
+        mbtn.setAttribute('aria-expanded', v2 ? 'true' : 'false');
+        if (wrap) wrap.style.width = 'min(' + (v2 ? 360 : 300) + 'px,calc(100vw - 40px))';
+        menu.style.maxHeight = v2 ? Math.min(measure(), innerHeight - 90) + 'px' : '56px';
+        menu.style.overflowY = v2 ? 'auto' : 'hidden';
+        menu.style.boxShadow = v2 ? '0 40px 80px -20px rgba(0,0,0,.7)' : 'none';
+      };
+      mbtn.setAttribute('aria-expanded', 'false');
+      let tmr;
+      const enter = () => { clearTimeout(tmr); set(true); };
+      const leave = () => { clearTimeout(tmr); tmr = setTimeout(() => set(false), 260); };
+      const onBtn = e => { e.preventDefault(); e.stopPropagation(); clearTimeout(tmr); set(!open); };
+      const onDoc = e => { if (open && wrap && !wrap.contains(e.target)) { clearTimeout(tmr); set(false); } };
+      const onKey = e => { if (e.key === 'Escape' && open) set(false); };
+      const onResize = () => { if (open) menu.style.maxHeight = Math.min(measure(), innerHeight - 90) + 'px'; };
+      if (wrap && matchMedia('(pointer:fine)').matches) {
+        wrap.addEventListener('mouseenter', enter);
+        wrap.addEventListener('mouseleave', leave);
+      }
+      mbtn.addEventListener('click', onBtn);
+      document.addEventListener('pointerdown', onDoc);
+      document.addEventListener('keydown', onKey);
+      addEventListener('resize', onResize);
+      this.offMenu = () => {
+        if (wrap) { wrap.removeEventListener('mouseenter', enter); wrap.removeEventListener('mouseleave', leave); }
+        mbtn.removeEventListener('click', onBtn);
+        document.removeEventListener('pointerdown', onDoc);
+        document.removeEventListener('keydown', onKey);
+        removeEventListener('resize', onResize);
+      };
+    }
+
+    document.querySelectorAll('[data-next-card]').forEach(c => {
+      const img = c.querySelector('[data-next-img]');
+      const arw = c.querySelector('[data-next-arrow]');
+      const on = () => {
+        if (img) img.style.transform = 'scale(1.05)';
+        if (arw) { arw.style.transform = 'translateX(4px)'; arw.style.borderColor = '#FF6B69'; arw.style.color = '#FF6B69'; }
+      };
+      const off = () => {
+        if (img) img.style.transform = 'scale(1)';
+        if (arw) { arw.style.transform = 'none'; arw.style.borderColor = '#2E2927'; arw.style.color = 'rgba(252,250,248,.75)'; }
+      };
+      c.addEventListener('pointerenter', on);
+      c.addEventListener('pointerleave', off);
+    });
+
+    const v = document.querySelector('video');
+    if (v) {
+      v.muted = true; v.loop = true; v.playsInline = true;
+      const kick = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+      kick();
+      v.addEventListener('canplay', kick, { once: true });
+      v.addEventListener('loadeddata', kick, { once: true });
+      this.videoTimer = setTimeout(kick, 800);
+    }
+  }
+  componentWillUnmount() {
+    (this.cleanup || []).forEach(fn => { try { fn(); } catch (e) {} });
+    if (this.offScroll) this.offScroll();
+    if (this.offMenu) this.offMenu();
+    clearTimeout(this.failsafe);
+    clearTimeout(this.videoTimer);
+  }
+  renderVals() {
+    return {
+      menu: [
+        { id: 'home', label: 'Home', href: './index.html' },
+        { id: 'work', label: 'Work', href: './index.html#work' },
+        { id: 'about', label: 'About', href: './index.html#about' }
+      ],
+      overview: Array.from({ length: 10 }, (_, i) => ({
+        id: String(i + 1).padStart(2, '0'),
+        label: 'Overview ' + String(i + 1).padStart(2, '0')
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
