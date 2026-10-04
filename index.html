@@ -256,7 +256,6 @@ img, video, canvas { max-width: 100%; }
     overflow-x: auto !important;
     overflow-y: visible !important;
     -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
     overscroll-behavior-x: contain;
 
     /* critical: real padding, no negative margin */
@@ -1288,6 +1287,53 @@ class Component extends DCLogic {
       if (!img.src.endsWith(src.replace('./', ''))) { img.style.display = ''; img.src = src; }
     });
   }
+  setupToolsSwiperAuto() {
+    const row = document.getElementById('sp-toolsrow');
+    if (!row) return;
+
+    const isMobile = () => matchMedia('(max-width: 640px)').matches;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let isUserInteracting = false;
+    let resumeTimeout = null;
+    let rafId = null;
+
+    const pause = () => {
+      isUserInteracting = true;
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(() => {
+        isUserInteracting = false;
+      }, 2500);
+    };
+
+    ['pointerdown', 'touchstart', 'mousedown', 'wheel', 'dragstart', 'touchmove'].forEach(evt => {
+      row.addEventListener(evt, pause, { passive: true });
+    });
+
+    const speed = 0.7; // ultra-smooth speed in pixels per frame
+
+    const tick = () => {
+      rafId = requestAnimationFrame(tick);
+      if (!isMobile() || isUserInteracting) return;
+
+      const maxScroll = row.scrollWidth - row.clientWidth;
+      if (maxScroll <= 4) return;
+
+      row.scrollLeft += speed;
+
+      if (row.scrollLeft >= maxScroll - 1) {
+        row.scrollLeft = 0;
+      }
+    };
+
+    rafId = requestAnimationFrame(tick);
+
+    if (!this.cleanup) this.cleanup = [];
+    this.cleanup.push(() => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (resumeTimeout) clearTimeout(resumeTimeout);
+    });
+  }
   componentDidUpdate() { this.wireToolIcons(); }
   animateSvcPanel(idx) {
     const el = this.svcPanelRef && this.svcPanelRef.current;
@@ -2219,6 +2265,7 @@ gsap.fromTo(card, { rotateY: -5, rotateX: 2, z: -30, scale: 0.975 }, { rotateY: 
     }
     this.wireContactDrawer();
     this.wireToolIcons();
+    this.setupToolsSwiperAuto();
     this.applyProps();
     this.setupGallery3D();
     this.setupGridVideos();
