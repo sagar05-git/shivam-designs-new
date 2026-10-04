@@ -573,7 +573,7 @@ img, video, canvas { max-width: 100%; }
 <div id="sp-herotrack" style="position:relative;height:300vh">
 <section id="top" data-screen-label="Hero" style="position:sticky;top:0;height:100svh;min-height:620px;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:96px 0 0;background:#070807">
   <div id="sp-herovid" style="position:absolute;inset:0;z-index:0;pointer-events:none;will-change:transform;background:#070807;-webkit-mask-image:linear-gradient(to bottom,transparent 2%,#000 14%,#000 74%,transparent 95%);mask-image:linear-gradient(to bottom,transparent 2%,#000 14%,#000 74%,transparent 95%)">
-    <video id="sp-video" src="./uploads/Video.mp4" playsinline="" preload="auto" style="mix-blend-mode:lighten;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:translateY(-5%) scale(.9);opacity:0;transition:opacity .7s ease;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 18%,#000 82%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 18%,#000 82%,transparent 100%)"></video>
+    <video id="sp-video" src="./uploads/Video.mp4" playsinline webkit-playsinline muted preload="auto" style="mix-blend-mode:lighten;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:translateY(-5%) scale(.9);opacity:0;transition:opacity .7s ease;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 18%,#000 82%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 18%,#000 82%,transparent 100%)"></video>
     <audio id="sp-heroaudio" preload="none" loop=""></audio>
     <div id="sp-herofade" aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:34vh;z-index:3;pointer-events:none;transition:background .5s linear;background:linear-gradient(180deg,rgba(13,10,10,0) 0%,rgba(13,10,10,.45) 42%,rgba(13,10,10,.85) 74%,#070807 100%)"></div>
     
@@ -1565,7 +1565,6 @@ gsap.fromTo(card, { rotateY: -5, rotateX: 2, z: -30, scale: 0.975 }, { rotateY: 
     // some origins serve the mp4 without range support, so every seek is a silent
     // no-op. Re-host the bytes as a Blob URL, which is always seekable.
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (!matchMedia('(min-width: 900px)').matches) return;
     let done = false;
     const swap = async () => {
       if (done) return;
@@ -1590,7 +1589,29 @@ gsap.fromTo(card, { rotateY: -5, rotateX: 2, z: -30, scale: 0.975 }, { rotateY: 
     const track = document.getElementById('sp-herotrack');
     const vid = document.getElementById('sp-video');
     if (!track || !vid) return;
-    vid.muted = true; vid.defaultMuted = true;
+    vid.muted = true; 
+    vid.defaultMuted = true;
+    vid.playsInline = true;
+    vid.setAttribute('playsinline', '');
+    vid.setAttribute('webkit-playsinline', '');
+    vid.setAttribute('muted', '');
+    const unlock = () => {
+    const p = vid.play();
+    if (p && typeof p.then === 'function') {
+      p.then(() => {
+        try { vid.pause(); } catch (e) {}
+        try { if (vid.currentTime > 0.05) vid.currentTime = 0; } catch (e) {}
+      }).catch(() => {});
+    } else {
+      try { vid.pause(); } catch (e) {}
+    }
+  };
+  if (vid.readyState >= 2) unlock();
+  else {
+    ['loadeddata', 'canplay', 'loadedmetadata'].forEach(ev => {
+      vid.addEventListener(ev, unlock, { once: true });
+    });
+  }
     this.ensureSeekable(vid);
     const show = () => { vid.style.opacity = '1'; };
     // blend the letterbox behind the video into the frame's own average color
