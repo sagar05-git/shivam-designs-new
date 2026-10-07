@@ -286,15 +286,15 @@ img, video, svg, canvas { max-width: 100%; }
 
 <section data-anim="" style="position:relative;z-index:2;padding:0 clamp(20px,5vw,80px) clamp(50px,7vw,100px)">
   <div style="position:relative;overflow:hidden;border-radius:clamp(14px,2vw,26px);background:#1C1817;border:1px solid #2E2927;height:clamp(300px,58vw,760px)">
-    <video src="./uploads/Social%20media.mp4" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="width:100%;height:100%;object-fit:cover;display:block"></video>
+    <video src="./uploads/Social%20Final/social-media-cover-motion-v3-no-text-1920x1080-5mb.webm" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="width:100%;height:100%;object-fit:cover;display:block"></video>
   </div>
 </section>
 
 <section data-anim="" data-ovsection="" style="position:relative;z-index:2;max-width:none;margin:0 auto;padding:0 clamp(20px,5vw,80px) clamp(60px,8vw,120px);display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(24px,3vw,54px);align-items:start">
   <div style="order:2;display:flex;flex-direction:column;gap:clamp(10px,1.4vw,18px);min-width:0">
     <sc-for list="{{ overview }}" as="o" hint-placeholder-count="10">
-      <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; height: clamp(340px,46vw,760px); width: 100%">
-        <image-slot id="sm-ov-{{ o.id }}" shape="rect" placeholder="{{ o.label }}" style="width: 100%"></image-slot>
+      <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+        <img src="{{ o.src }}" alt="{{ o.label }}" style="width: 100%; height: auto; display: block; object-fit: cover;">
       </div>
     </sc-for>
   </div>
@@ -860,10 +860,18 @@ class Component extends DCLogic {
         { id: 'work', label: 'Work', href: './index.html#work' },
         { id: 'about', label: 'About', href: './index.html#about' }
       ],
-      overview: Array.from({ length: 10 }, (_, i) => ({
-        id: i === 0 ? '01-b' : String(i + 1).padStart(2, '0'),
-        label: 'Overview ' + String(i + 1).padStart(2, '0')
-      }))
+      overview: [
+        { id: '01', label: 'SFR Footwear', src: './uploads/Social%20Final/01-sfr-footwear-1920x1080.png' },
+        { id: '02', label: 'Practina Option Vibrant', src: './uploads/Social%20Final/02-practina-option-vibrant-1920x1080.png' },
+        { id: '03', label: 'Credee', src: './uploads/Social%20Final/03-credee-1920x1080.png' },
+        { id: '04', label: 'Ad Creatives', src: './uploads/Social%20Final/04-ad-creatives-1920x1080.png' },
+        { id: '05', label: 'Oxford Street', src: './uploads/Social%20Final/05-oxford-street-1920x1080.png' },
+        { id: '06', label: 'Airson Rikbros', src: './uploads/Social%20Final/06-airson-rikbros-1920x1080.png' },
+        { id: '07', label: 'Supreme No 1', src: './uploads/Social%20Final/07-supreme-no1-1920x1080%20a.png' },
+        { id: '08', label: 'Denefits', src: './uploads/Social%20Final/08-denefits-1920x1080.png' },
+        { id: '09', label: 'IRO SUSHI Sakura Still Life', src: './uploads/Social%20Final/IRO%20SUSHI%20Sakura%20Still%20Life.png' },
+        { id: '10', label: 'Option Mobile App', src: './uploads/Social%20Final/Option%20Mobile%20App.png' }
+      ]
     };
   }
 }

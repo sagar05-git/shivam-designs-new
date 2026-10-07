@@ -469,7 +469,7 @@ img, video, canvas { max-width: 100%; }
 <meta name="ext-resource-dependency" content="./uploads/Option Mobile App.webp">
 <meta name="ext-resource-dependency" content="./uploads/Packaging.webp">
 <meta name="ext-resource-dependency" content="./uploads/SD logo-4f25ae85.svg">
-<meta name="ext-resource-dependency" content="./uploads/Social media.mp4">
+<meta name="ext-resource-dependency" content="./uploads/Social%20Final/social-media-cover-motion-v3-no-text-1920x1080-5mb.webm">
 <meta name="ext-resource-dependency" content="./uploads/Video.mp4">
 <meta name="ext-resource-dependency" content="./uploads/Web View.webp">
 <meta name="ext-resource-dependency" content="./uploads/adobe-after-effects-icon-bb44d842.svg">
@@ -517,7 +517,7 @@ img, video, canvas { max-width: 100%; }
   <img data-key="./uploads/Option Mobile App.webp" src="./uploads/Option Mobile App.webp" alt="">
   <img data-key="./uploads/Packaging.webp" src="./uploads/Packaging.webp" alt="">
   <img data-key="./uploads/SD logo-4f25ae85.svg" src="./uploads/SD logo-4f25ae85.svg" alt="">
-  <video data-key="./uploads/Social media.mp4" src="./uploads/Social media.mp4" preload="metadata" muted></video>
+  <video data-key="./uploads/Social%20Final/social-media-cover-motion-v3-no-text-1920x1080-5mb.webm" src="./uploads/Social%20Final/social-media-cover-motion-v3-no-text-1920x1080-5mb.webm" preload="metadata" muted></video>
   <video data-key="./uploads/Video.mp4" src="./uploads/Video.mp4" preload="metadata" muted></video>
   <img data-key="./uploads/Web View.webp" src="./uploads/Web View.webp" alt="">
   <img data-key="./uploads/adobe-after-effects-icon-bb44d842.svg" src="./uploads/adobe-after-effects-icon-bb44d842.svg" alt="">
@@ -864,15 +864,15 @@ img, video, canvas { max-width: 100%; }
 
 <section data-anim="" style="position:relative;z-index:2;padding:0 clamp(20px,5vw,80px) clamp(50px,7vw,100px)">
   <div style="position:relative;overflow:hidden;border-radius:clamp(14px,2vw,26px);background:#1C1817;border:1px solid #2E2927;height:clamp(300px,58vw,760px)">
-    <video id="sm-master" src="./uploads/Social media.mp4" poster="./uploads/social-card-poster.jpg" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="width:100%;height:100%;object-fit:cover;display:block"></video>
+    <video id="sm-master" src="./uploads/Social%20Final/social-media-cover-motion-v3-no-text-1920x1080-5mb.webm" poster="./uploads/social-card-poster.jpg" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="width:100%;height:100%;object-fit:cover;display:block"></video>
   </div>
 </section>
 
 <section data-anim="" data-ovsection="" style="position:relative;z-index:2;max-width:none;margin:0 auto;padding:0 clamp(20px,5vw,80px) clamp(60px,8vw,120px);display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(24px,3vw,54px);align-items:start">
   <div style="order:2;display:flex;flex-direction:column;gap:clamp(10px,1.4vw,18px);min-width:0">
     <sc-for list="{{ overview }}" as="o" hint-placeholder-count="10">
-      <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; height: clamp(340px,46vw,760px); width: 100%">
-        <image-slot id="sm-ov-{{ o.id }}" shape="rect" placeholder="{{ o.label }}" style="width: 100%"></image-slot>
+      <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+        <img src="{{ o.src }}" alt="{{ o.label }}" style="width: 100%; height: auto; display: block; object-fit: cover;">
       </div>
     </sc-for>
   </div>
@@ -2676,10 +2676,18 @@ gsap.fromTo(card, { rotateY: -5, rotateX: 2, z: -30, scale: 0.975 }, { rotateY: 
     const hv = this.state && this.state.hoverTool;
     if (!this.rowRef) this.rowRef = React.createRef();
     const vals = {
-      overview: Array.from({ length: 10 }, (_, i) => ({
-        id: String(i + 1).padStart(2, '0'),
-        label: 'Overview ' + String(i + 1).padStart(2, '0')
-      })),
+      overview: [
+        { id: '01', label: 'SFR Footwear', src: './uploads/Social%20Final/01-sfr-footwear-1920x1080.png' },
+        { id: '02', label: 'Practina Option Vibrant', src: './uploads/Social%20Final/02-practina-option-vibrant-1920x1080.png' },
+        { id: '03', label: 'Credee', src: './uploads/Social%20Final/03-credee-1920x1080.png' },
+        { id: '04', label: 'Ad Creatives', src: './uploads/Social%20Final/04-ad-creatives-1920x1080.png' },
+        { id: '05', label: 'Oxford Street', src: './uploads/Social%20Final/05-oxford-street-1920x1080.png' },
+        { id: '06', label: 'Airson Rikbros', src: './uploads/Social%20Final/06-airson-rikbros-1920x1080.png' },
+        { id: '07', label: 'Supreme No 1', src: './uploads/Social%20Final/07-supreme-no1-1920x1080%20a.png' },
+        { id: '08', label: 'Denefits', src: './uploads/Social%20Final/08-denefits-1920x1080.png' },
+        { id: '09', label: 'IRO SUSHI Sakura Still Life', src: './uploads/Social%20Final/IRO%20SUSHI%20Sakura%20Still%20Life.png' },
+        { id: '10', label: 'Option Mobile App', src: './uploads/Social%20Final/Option%20Mobile%20App.png' }
+      ],
       brands: [
         { id: 'b1', name: 'Brand 01' }, { id: 'b2', name: 'Brand 02' },
         { id: 'b3', name: 'Brand 03' }, { id: 'b4', name: 'Brand 04' },
@@ -2698,7 +2706,7 @@ gsap.fromTo(card, { rotateY: -5, rotateX: 2, z: -30, scale: 0.975 }, { rotateY: 
         { num: '04', title: 'Leadership & Strategy', body: 'Creative strategy, design reviews and mentoring — translating between marketing, product and leadership so decisions land the first time.', tags: ['Creative Strategy', 'Team Mentoring', 'Design Ops', 'Cross-functional'] }
       ],
       projects: [
-        { id: 'p01', title: 'Social Media', sub: 'Campaign, launch creative', year: '2026', span: 2, ratio: '16/9', href: './social-media.html', vid: './uploads/Social media.mp4' },
+        { id: 'p01', title: 'Social Media', sub: 'Campaign, launch creative', year: '2026', span: 2, ratio: '16/9', href: './social-media.html', vid: './uploads/Social%20Final/social-media-cover-motion-v3-no-text-1920x1080-5mb.webm' },
         { id: 'p04', title: 'Packaging 3D', sub: 'Label design, 3D renders', year: '2025', span: 1, ratio: '1/1', href: './packaging-3d.html', img: './uploads/Packaging.webp' },
         { id: 'p05', title: 'Mobile App', sub: 'UI, design system', year: '2025', span: 1, ratio: '1/1', href: './mobile-app.html', img: './uploads/Option Mobile App.webp' },
         { id: 'p06', title: 'Web Design', sub: 'Identity, UI, landing pages', year: '2024–2025', span: 2, ratio: '16/9', href: './web-design.html', img: './uploads/Web View.webp' },
