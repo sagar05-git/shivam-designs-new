@@ -294,11 +294,39 @@ img, video, svg, canvas { max-width: 100%; }
 
 <section data-anim="" data-ovsection="" style="position:relative;z-index:2;max-width:none;margin:0 auto;padding:0 clamp(20px,5vw,80px) clamp(60px,8vw,120px);display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(24px,3vw,54px);align-items:start">
   <div style="order:2;display:flex;flex-direction:column;gap:clamp(10px,1.4vw,18px);min-width:0">
-    <sc-for list="{{ overview }}" as="o" hint-placeholder-count="10">
-      <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; height: clamp(340px,46vw,760px); width: 100%">
-        <image-slot id="pk-ov-{{ o.id }}" shape="rect" placeholder="{{ o.label }}" style="width: 100%"></image-slot>
-      </div>
-    </sc-for>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/Main Cover.jpg" alt="Main Cover" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/Inside Cover.jpg" alt="Inside Cover" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/1.jpg" alt="Packaging 1" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/2.png" alt="Packaging 2" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/3.png" alt="Packaging 3" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/4.png" alt="Packaging 4" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/5.png" alt="Packaging 5" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/6.png" alt="Packaging 6" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/7.png" alt="Packaging 7" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/8.png" alt="Packaging 8" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
+    <div style="position: relative; overflow: hidden; border-radius: clamp(10px,1.4vw,18px); background: #1C1817; border: 1px solid #2E2927; width: 100%">
+      <img src="./uploads/Packaging/9.png" alt="Packaging 9" style="width:100%;height:100%;object-fit:cover;display:block">
+    </div>
   </div>
   <div data-ovnote="" style="order:1;position:sticky;top:96px;display:flex;flex-direction:column;gap:14px">
     <span style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#FF6B69">Overview</span>
@@ -860,11 +888,7 @@ class Component extends DCLogic {
         { id: 'home', label: 'Home', href: './index.html' },
         { id: 'work', label: 'Work', href: './index.html#work' },
         { id: 'about', label: 'About', href: './index.html#about' }
-      ],
-      overview: Array.from({ length: 10 }, (_, i) => ({
-        id: String(i + 1).padStart(2, '0'),
-        label: 'Overview ' + String(i + 1).padStart(2, '0')
-      }))
+      ]
     };
   }
 }
